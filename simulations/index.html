@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script type="text/javascript" src="randomgraph.js"></script>
+    <script type="text/javascript" src="d3.v3.min.js"></script>
+    <script type="text/javascript" src="script.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+<div id="controls">
+    <b>Random Graphs</b> <select>
+        <option data-p="r:4,h:4">BalancedTree</option>
+        <option data-p="n:150,m0:10,M:2">BarabasiAlbert</option>
+        <option data-p="n:150,p:0.05">ErdosRenyi.np</option>
+        <option data-p="n:100,m:250">ErdosRenyi.nm</option>
+        <option data-p="n:120,K:4,alpha:3.5">WattsStrogatz.alpha</option>   
+        <option data-p="n:150,K:4,beta:0.07">WattsStrogatz.beta</option>
+    </select>
+    <div id="params">
+        
+    </div>
+    <div id="graph">
+        <label>charge<input id="charge" type="range" min="0" value="50" max="100" /></label>
+        <label>link distance<input id="dist" type="range" min="0" value="20" max="100" /></label>
+    </div>
+</div>
+
+</body>
+</html>
+
