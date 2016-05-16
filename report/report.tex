@@ -1,6 +1,8 @@
 \documentclass[10pt,journal,a4paper]{IEEEtran}
 \usepackage{tikz}
 \usepackage{caption}
+\usepackage{amsmath}
+\usepackage{amssymb}
 
 \begin{document}
 %
@@ -8,15 +10,14 @@
 % can use linebreaks \\ within to get better formatting as desired
 \title{Report for the NOOC project}
 \author{Ismail Bouanani and Jean-Baptiste Cordonnier}
-%
-% 
-%\author{}
 
 \IEEEcompsoctitleabstractindextext{
 \begin{abstract}
 Here goes a short abstract
 \end{abstract}
 }
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
 
 % make the title area
 \maketitle
@@ -34,7 +35,7 @@ The rumor spreading protocol is the simplest algorithm we can come with in order
 
 \section{Markov chains set-up}
 
-The analysis in the paper of Guo and Sun \cite{GuoSun} compare the problem of gossip spreading to many random walks in parallel. Whenever a node $u$ pushes the information to an uninformed node $v$, one random walk stays in $u$ and another one goes to $v$. The random walk that "stays" in the same node is called $lazy$ while the other one is non-lazy (or $\overline{lazy}$). This split of random walks represents the fact that the information is now in $u$ and in $v$, $u$ will continue to spread this knowledge in the following rounds.
+The analysis in the paper of Guo and Sun \cite{GuoSun} compares the problem of gossip spreading to many random walks in parallel. Whenever a node $u$ pushes the information to an uninformed node $v$, one random walk stays in $u$ and another one goes to $v$. The random walk that "stays" in the same node is called $lazy$ while the other one is non-lazy (or $\overline{lazy}$). This split of random walks represents the fact that the information is now in $u$ and in $v$, $u$ will continue to spread this knowledge in the following rounds.
 
 \begin{figure}[h]
 \centering
@@ -62,6 +63,17 @@ We define two types of random walks when the information is spread through the g
 We can consider all the random walks pattern after $k$ steps as $S \in \mathcal C_k = \{ lazy, \overline{lazy} \}^k$. We define the indicator random variable $X_{u,v}^S$ (resp. $Y_{u,v}^S$) that the forward (resp. backward) random walk with pattern $S$ and initial node $u$ will end up at node $v$. To show that a node $w$ is reached by the gossip in $T$ step we need to find a vertex $u$ such that $X_{s,u}^{S}Y_{w,u}^{S'} = 1$ with $|S| = |S'| = T/2$.
 
 \section{Bound analysis}
+
+The aim of this lemma is to show that after $k$ rounds, and independently of the pattern followed (we consider the lazy version of the matrix here), any distribution is identical to the stationary distribution $\pi \otimes \pi$ (i.e $P(u,v)=(1/n)^2$) for all $(u,v) \in V[G] \times V[G]$. To do so, we lower bound the quadratic distance
+
+\[
+  \norm{u(\mathcal L_{\gamma,\gamma} \circ \mathcal Q(M))^k - \pi \otimes \pi}_2 \leq (1 - \gamma \alpha / 2)^k + 2 \sqrt 2 \gamma \alpha^{-1} n^{-3/2}
+\]
+
+The conclusion for that is, the convergence of the process does not depend on the node who has the information first since after $k$ rounds ($k$ big enough), the parallel $2^k$ Markov chains have joint evolutions (or almost).
+
+The intuition behind any case of rumor spreading is that the topology of the graph has a great impact on the efficiency of our algorithm. For instance, nodes very poorly connected and far from the majority of the other nodes will be hard to reach or terrible gossip starter. This essence of "good" and "bad" graphs is captured by the spectral gap $\alpha$ and the irregularity $\beta$. The spectral gap $\alpha$ is defined by $\alpha \triangleq 1 - \lambda_2$ where $\lambda_2$ is the second eigenvalue of the Laplacian matrix associated to the graph. 
+Intuition tells us that if there are a lot of edges and no bottlenecks then the flow should spread out quickly and the Markov chain mix rapidly. The irregularity $\beta$ is defined as $\beta \triangleq \Delta/\delta$.
 
 \section{Randomness needed}
 
