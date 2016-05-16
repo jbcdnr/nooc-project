@@ -2,6 +2,10 @@
 \usepackage{tikz}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+
 \begin{document}
 %
 % paper title
@@ -11,7 +15,7 @@
 
 \IEEEcompsoctitleabstractindextext{
 \begin{abstract}
-Rumor spreading is a well known problem with multiple applications, from information broadcast in complex distributed systems to analysis of viral content on social networks. This project report will go over the paper of Guo and Sun \cite{GuoSun}. We aim at providing a good understanding of the concept and the mathematical tool used to show the $O(\log n)$ bound for the time steps needed to spread a rumor. We will then provide simulation of this algorithm on specific graphs.
+Rumor spreading is a well known problem with multiple applications, from information broadcast in complex distributed systems to analysis of viral content on social networks. This project report will go over the paper of Guo and Sun \cite{GuoSun}. We aim at providing a good understanding of the concept and the mathematical tool used to show the $O(\log n)$ bound for the time steps needed to spread a rumor. We will then provide simulation of this algorithm on specific graphs. Finally we will explain the number of bits of randomness needed to run the algorithm.
 \end{abstract}
 }
 
@@ -71,10 +75,41 @@ The aim of this lemma is to show that after $k$ rounds, and independently of the
 
 The conclusion for that is, the convergence of the process does not depend on the node who has the information first since after $k$ rounds ($k$ big enough), the parallel $2^k$ Markov chains have joint evolutions (or almost).
 
-The intuition behind any case of rumor spreading is that the topology of the graph has a great impact on the efficiency of our algorithm. For instance, nodes very poorly connected and far from the majority of the other nodes will be hard to reach or terrible gossip starter. This essence of "good" and "bad" graphs is captured by the spectral gap $\alpha$ and the irregularity $\beta$. The spectral gap $\alpha$ is defined by $\alpha \triangleq 1 - \lambda_2$ where $\lambda_2$ is the second eigenvalue of the Laplacian matrix associated to the graph. 
+The intuition behind any case of rumor spreading is that the topology of the graph has a great impact on the efficiency of our algorithm. For instance, nodes very poorly connected and far from the majority of the other nodes will be hard to reach or terrible gossip starter. This essence of "good" and "bad" graphs is captured by the spectral gap $\alpha$ and the irregularity $\beta$. The spectral gap $\alpha$ is defined by $\alpha \triangleq 1 - \lambda_2$ where $\lambda_2$ is the second eigenvalue of the Laplacian matrix associated to the graph \cite{jerrum1988conductance}. 
 Intuition tells us that if there are a lot of edges and no bottlenecks then the flow should spread out quickly and the Markov chain mix rapidly. The irregularity $\beta$ is defined as $\beta \triangleq \Delta/\delta$.
 
 \section{Randomness needed}
+
+\section{Simulations}
+
+We can start with the simplest model that we have seen in class, the $C(n,p)$ graph.
+
+\begin{figure}
+\centering
+
+\begin{subfigure}[b]{.49\linewidth}
+\includegraphics[width=1\linewidth]{figs/barabasi-albert-0}
+\caption{$T=0$}
+\end{subfigure}%
+\begin{subfigure}[b]{.5\linewidth}
+\includegraphics[width=1\linewidth]{figs/barabasi-albert-4}
+\caption{$T=4$}
+\end{subfigure}
+
+\begin{subfigure}[b]{.5\linewidth}
+\includegraphics[width=1\linewidth]{figs/barabasi-albert-8}
+\caption{$T=8$}
+\end{subfigure}%
+\begin{subfigure}[b]{.5\linewidth}
+\includegraphics[width=1\linewidth]{figs/barabasi-albert-12}
+\caption{$T=12$}
+\end{subfigure}
+
+\caption{Rumor spreading (blue nodes) in Barabasi Albert graph with $n=800$, $m_0 = 20$ and $M = 4$}
+
+An interesting chart is the evolution of the number of nodes informed.
+
+\end{figure}
 
 \bibliography{biblio.bib}
 
