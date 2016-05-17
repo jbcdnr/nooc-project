@@ -16,12 +16,17 @@
 
 \IEEEcompsoctitleabstractindextext{
 \begin{abstract}
-Rumor spreading is a well known problem with multiple applications, from information broadcast in complex distributed systems to analysis of viral content on social networks. This project report will go over the paper of Guo and Sun \cite{GuoSun}. We aim at providing a good understanding of the concept and the mathematical tool used to show the $O(\log n)$ bound for the time steps needed to spread a rumor. We will then provide simulation of this algorithm on specific graphs. Finally we will explain the number of bits of randomness needed to run the algorithm.
+Rumor spreading is a well known problem with multiple applications, from information broadcast in complex distributed systems to analysis of viral content on social networks. This project report will go over the paper of Guo and Sun \cite{guosun}. We aim at providing a good understanding of the concept and the mathematical tool used to show the $O(\log n)$ bound for the time steps needed to spread a rumor. We will then provide simulation of this algorithm on specific graphs. Finally we will explain the number of bits of randomness needed to run the algorithm.
 \end{abstract}
 }
 
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
 \newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\renewcommand{\l}{\left}
+\renewcommand{\r}{\right}
+\renewcommand{\P}[1]{\mathbf{P}\l\{#1\r\}}
+\newcommand{\E}[1]{\mathbf{E}\l[#1\r]}
 
 % make the title area
 \maketitle
@@ -39,7 +44,7 @@ The rumor spreading protocol is the simplest algorithm we can come with in order
 
 \section{Markov chains set-up}
 
-The analysis in the paper of Guo and Sun \cite{GuoSun} compares the problem of gossip spreading to many random walks in parallel. Whenever a node $u$ pushes the information to an uninformed node $v$, one random walk stays in $u$ and another one goes to $v$. The random walk that "stays" in the same node is called $lazy$ while the other one is non-lazy (or $\overline{lazy}$). This split of random walks represents the fact that the information is now in $u$ and in $v$, $u$ will continue to spread this knowledge in the following rounds.
+The analysis in the paper of Guo and Sun \cite{guosun} compares the problem of gossip spreading to many random walks in parallel. Whenever a node $u$ pushes the information to an uninformed node $v$, one random walk stays in $u$ and another one goes to $v$. The random walk that "stays" in the same node is called $lazy$ while the other one is non-lazy (or $\overline{lazy}$). This split of random walks represents the fact that the information is now in $u$ and in $v$, $u$ will continue to spread this knowledge in the following rounds.
 
 \begin{figure}[h]
 \centering
@@ -64,9 +69,23 @@ The analysis in the paper of Guo and Sun \cite{GuoSun} compares the problem of g
 
 We define two types of random walks when the information is spread through the graph: the forward and the backward random walks. Forward random walks start from the source $s$ while backward random walks are used only in the analysis and start from a targeted node $t$. In fact if a node $u$ pushes information to a node $v$, we can also say that $v$ "pulls" the information from $u$ and there exists a random walk called reverse having a step from $v$ to $u$, that remains true if and only if $u$ the only node that pushed to $v$ is $u$.Then to know if a node $t$ has been informed, we only need to show that there exists a node $v$ reached by a forward random walk from $s$ and by a backward random walk from $t$.
 
-We can consider all the random walks pattern after $k$ steps as $S \in \mathcal C_k = \{ lazy, \overline{lazy} \}^k$. We define the indicator random variable $X_{u,v}^S$ (resp. $Y_{u,v}^S$) that the forward (resp. backward) random walk with pattern $S$ and initial node $u$ will end up at node $v$. To show that a node $w$ is reached by the gossip in $T$ step we need to find a vertex $u$ such that $X_{s,u}^{S}Y_{w,u}^{S'} = 1$ with $|S| = |S'| = T/2$.
+We can consider all the random walks pattern after $k$ steps as $S \in \mathcal C_k = \{ lazy, \overline{lazy} \}^k$. We define the indicator random variable $X_{u,v}^S$ (resp. $Y_{u,v}^S$) that the forward (resp. backward) random walk with pattern $S$ and initial node $u$ will end up at node $v$. To show that a node $w$ is reached by the gossip in $T$ steps we need to find a vertex $u$ such that $X_{s,u}^{S}Y_{w,u}^{S'} = 1$ with $|S| = |S'| = T/2$. We can now lower bound the probability of a node to be informed in $T$ steps as follow
+
+\begin{align*}
+  \P{w \text{ informed in $T$ rounds}} \geq \P{\sum_{S,S'\in \mathcal C_k, u\in V[G]} X_{s,u}^S Y_{w,u}^{S'} > 0}
+\end{align*}
+
+In the next section we will analyze this lower bound thanks to random walks taken individually and pair wisely.
 
 \section{Bound analysis}
+
+The need to analyze two random walks together to get a lower bound of the expectation leads us to use Markov chain coupling. Formally, a matrix coupling is defined as follow:
+
+\begin{definition}
+  A stochastic matrix $\mathbf{M'' \in \mathbb{R}^{n\times n} \otimes \mathbb{R}^{n\times n}}$ is a coupling of $\mathbf{M,M''} \in \mathbb{R}^{n\times n}$ if $\sum_{x\in[n]} \mathbf{M''}_{(u,w)(v,x)} = \mathbf{M}_{u,v}$ for any $u,w,v \in [n]$ and $\sum_{v\in[n]} \mathbf{M''}_{(u,w)(v,x)} = \mathbf{M'}_{w,x}$.
+\end{definition}
+
+The intuition behind this is that we are mixing two Markov chains together and coupling their state. Now the state of $\mathbf{M''}$ will contain the state of both matrices, and the two matrices will behave independently according to their own transitions distributions.
 
 The aim of this lemma is to show that after $k$ rounds, and independently of the pattern followed (we consider the lazy version of the matrix here), any distribution is identical to the stationary distribution $\pi \otimes \pi$ (i.e $P(u,v)=(1/n)^2$) for all $(u,v) \in V[G] \times V[G]$. To do so, we lower bound the quadratic distance
 
@@ -76,12 +95,12 @@ The aim of this lemma is to show that after $k$ rounds, and independently of the
 
 The conclusion for that is, the convergence of the process does not depend on the node who has the information first since after $k$ rounds ($k$ big enough), the parallel $2^k$ Markov chains have joint evolutions (or almost).
 
-The intuition behind any case of rumor spreading is that the topology of the graph has a great impact on the efficiency of our algorithm. For instance, nodes very poorly connected and far from the majority of the other nodes will be hard to reach or terrible gossip starter. This essence of "good" and "bad" graphs is captured by the spectral gap $\alpha$ and the irregularity $\beta$. The spectral gap $\alpha$ is defined by $\alpha \triangleq 1 - \lambda_2$ where $\lambda_2$ is the second eigenvalue of the Laplacian matrix associated to the graph \cite{jerrum1988conductance}. 
+The intuition behind any case of rumor spreading is that the topology of the graph has a great impact on the efficiency of our algorithm. For instance, nodes very poorly connected and far from the majority of the other nodes will be hard to reach or terrible gossip starter. This essence of "good" and "bad" graphs is captured by the spectral gap $\alpha$ and the irregularity $\beta$. The spectral gap $\alpha$ is defined by $\alpha \triangleq 1 - \lambda_2$ where $\lambda_2$ is the second eigenvalue of the Laplacian matrix associated to the graph \cite{jerrum}. 
 Intuition tells us that if there are a lot of edges and no bottlenecks then the flow should spread out quickly and the Markov chain mix rapidly. The irregularity $\beta$ is defined as $\beta \triangleq \Delta/\delta$.
 
 \section{Randomness needed}
 
-The second protocol uses pseudo-random generators,one for seed length $l'$ that produces $T/2 l$ bits outputs (one for each round). Concretely, it means, for a given node, it is a way to determine to which neighbor the information will be transmitted. Roughly speaking, pseudo-randomness means $P(G’0(x)=\underbrace{0\cdot0}_l)$ for a $l’$-length seed $x$ for instance is equal to $(1/2)^l$ (approximatively). We also use a pseudo random generator $f$:$l$-bits word $\to$ an index modulo delta for each possible node. To sum things up, all the randomness lie in the l’ bits seed that the system generates (actually there are two of them), then for each round the $G’$ PRG assigns a l bits word to these seeds ($x$ if round before $T/2$ and y otherwise). From this $l$ bits word, each informed node generates an index to modulate according to its neighbor list to know which neighbor to inform.
+The second protocol uses pseudo-random generators,one for seed length $l'$ that produces $T/2 l$ bits outputs (one for each round). Concretely, it means, for a given node, it is a way to determine to which neighbor the information will be transmitted. Roughly speaking, pseudo-randomness means $P(G’0(x)=\underbrace{0\dots0}_l)$ for a $l’$-length seed $x$ for instance is equal to $(1/2)^l$ (approximatively). We also use a pseudo random generator $f$:$l$-bits word $\to$ an index modulo delta for each possible node. To sum things up, all the randomness lie in the l’ bits seed that the system generates (actually there are two of them), then for each round the $G’$ PRG assigns a l bits word to these seeds ($x$ if round before $T/2$ and y otherwise). From this $l$ bits word, each informed node generates an index to modulate according to its neighbor list to know which neighbor to inform.
  The method to follow, is to start from arbitrary $l’$-long bit strings $x,y$. Construct a pseudo random generator (formule) for branching process $(T/2,n^2,2^l)$. The theorem D.5 tells us that $l=O(\log m+\log n)$ where $m=n^{\theta(1)}$,thus $l=O(\log(n^2))$. Then, we contract a pseudo random generator for CRs where $s=[m]^n$ with $m=n^{\theta(1)}$, we then apply the protocol described.
 
 \section{Simulations}
@@ -157,7 +176,19 @@ Intuitively it would be much more interesting to study more malformed graphs whe
 
 We can see in \cref{fig:split-chart} that the number of informed nodes palliates when the rumor has to cross the bottleneck. It is normal that the topology of a network affects the quality of the broadcast and bridging an information between two very well distinct populations is hard.
 
-\bibliography{biblio.bib}
+\begin{thebibliography}{1}
+
+\bibitem{guosun}
+Z.~Guo, H.~Sun, 
+\emph{Gossip vs. Markov Chains, and Randomness-Efficient Rumor Spreading}.\hskip 1em plus
+0.5em minus 0.4em\relax Proceedings of the Twenty-Sixth Annual ACM-SIAM Symposium on Discrete Algorithms, SODA 2015, San Diego, CA, USA, January 4-6, 2015.
+
+\bibitem{jerrum}
+M.~Jerrum, A.~Sinclair, 
+\emph{Conductance and the rapid mixing property for Markov chains: the approximation of permanent resolved}.\hskip 1em plus
+0.5em minus 0.4em\relax Proceedings of the twentieth annual ACM symposium on Theory of computing.
+
+\end{thebibliography}
 
 \end{document}
 
