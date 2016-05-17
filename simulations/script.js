@@ -116,6 +116,28 @@ function loadPreset(opt) {
 
 });
 
+function splitGraph(n,p,q) {
+  var g1 = randomgraph.ErdosRenyi.np(n,p)
+  var g2 = randomgraph.ErdosRenyi.np(n,p)
+  var graph = { nodes: g1.nodes.concat(g2.nodes), edges: g1.edges.concat(g2.edges.map(function (e) { return {
+    source: e.source + n,
+    target: e.target + n
+  }})) }
+
+   for (i = 0; i < n; i++) {
+                    for (j = n; j < 2 * n; j++) {
+                        if (Math.random() < q) {
+                            graph.edges.push({
+                                source: i,
+                                target: j
+                            });
+                        }
+                    }
+                }
+
+  return graph
+}
+
 
 
 
