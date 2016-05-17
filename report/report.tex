@@ -85,13 +85,30 @@ The need to analyze two random walks together to get a lower bound of the expect
   A stochastic matrix $\mathbf{M'' \in \mathbb{R}^{n\times n} \otimes \mathbb{R}^{n\times n}}$ is a coupling of $\mathbf{M,M''} \in \mathbb{R}^{n\times n}$ if $\sum_{x\in[n]} \mathbf{M''}_{(u,w)(v,x)} = \mathbf{M}_{u,v}$ for any $u,w,v \in [n]$ and $\sum_{v\in[n]} \mathbf{M''}_{(u,w)(v,x)} = \mathbf{M'}_{w,x}$.
 \end{definition}
 
-The intuition behind this is that we are mixing two Markov chains together and coupling their state. Now the state of $\mathbf{M''}$ will contain the state of both matrices, and the two matrices will behave independently according to their own transitions distributions.
+The intuition behind this is that we are mixing two Markov chains together and coupling their state. Now the state of $\mathbf{M''}$ will contain the state of both matrices, and the two matrices will behave independently according to their own transitions distributions. The paper \cite{guosun} also defines lazy Markov chain with a slack parameter $\gamma$ that represents the probability for a Markov chain to stay idle in the same state (by increasing the diagonal probabilities):
+
+\[
+  \mathcal L _ \gamma (\mathbf{M}) \triangleq (1-\gamma) \mathbf{I} + \gamma \mathbf{M}
+\]
+
+Finally, we define a lazy coupling of $\mathbf{M}$ and $\mathbf{M'}$ noted $\mathcal L_{\gamma, \gamma'}(\mathbf{M''})$ to be the coupling of $\mathcal L_\gamma(\mathbf{M})$ and $\mathcal L_{\gamma'}(\mathbf{M'})$. The last tool needed to characterize our bound with Markov chain is the Doeblin coupling \cite{coupling}. It reflects the fact that when two random walks are in the same state $u$ at the same time step $t$, they will stay together for all the remaining steps because the node $u$ can push the information to a single node $v$ chosen uniformly but both random walks (if non-lazy) should go to the same node. The Doeblin coupling of two copies of $\mathbf{M}$ is formally expressed as
+
+\[
+  \mathcal Q(\mathbf{M})_{(u,w)(v,x)} \triangleq \left\{
+    \begin{array}{ll}
+      (\mathbf{M} \otimes \mathbf{M})_{(u,w)(v,x)} & u \not = v,\\
+      \mathbf{M}_{(u,v)} \cdot \mathbf{1}_{v = x} & u = v.\\
+    \end{array}
+  \right.
+\]
 
 The aim of this lemma is to show that after $k$ rounds, and independently of the pattern followed (we consider the lazy version of the matrix here), any distribution is identical to the stationary distribution $\pi \otimes \pi$ (i.e $P(u,v)=(1/n)^2$) for all $(u,v) \in V[G] \times V[G]$. To do so, we lower bound the quadratic distance
 
 \[
   \norm{u(\mathcal L_{\gamma,\gamma} \circ \mathcal Q(M))^k - \pi \otimes \pi}_2 \leq (1 - \gamma \alpha / 2)^k + 2 \sqrt 2 \gamma \alpha^{-1} n^{-3/2}
 \]
+
+\textbf{TODO: expander graph}
 
 The conclusion for that is, the convergence of the process does not depend on the node who has the information first since after $k$ rounds ($k$ big enough), the parallel $2^k$ Markov chains have joint evolutions (or almost).
 
@@ -187,6 +204,11 @@ Z.~Guo, H.~Sun,
 M.~Jerrum, A.~Sinclair, 
 \emph{Conductance and the rapid mixing property for Markov chains: the approximation of permanent resolved}.\hskip 1em plus
 0.5em minus 0.4em\relax Proceedings of the twentieth annual ACM symposium on Theory of computing.
+
+\bibitem{coupling}
+T.~Lindvall, 
+\emph{Lectures on the Coupling Method}.\hskip 1em plus
+0.5em minus 0.4em\relax New York, 2002.
 
 \end{thebibliography}
 
