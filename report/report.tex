@@ -4,6 +4,7 @@
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage{caption}
+\usepackage{cleveref}
 \usepackage{subcaption}
 
 \begin{document}
@@ -82,12 +83,12 @@ Intuition tells us that if there are a lot of edges and no bottlenecks then the 
 
 \section{Simulations}
 
-We can start with the simplest model that we have seen in class, the $C(n,p)$ graph.
+An interesting part of this algorithm is the data visualization over some graphs we saw during the lecture. We could start with the simplest model that we have seen in class, the $C(n,p)$ graph but we will start with the Barabasi-Albert graph model instead. This model is more realistic of how real networks look like with important hub and preferential attachment for already well connected nodes. The figures \ref{barabasi-albert-graphs} show the evolution of a rumor in such a graph. The beginning of the spreading is quite slow because very few nodes have the information, then it grows exponentially before slowing down because very few nodes are left to be informed. 
 
 \begin{figure}
 \centering
 
-\begin{subfigure}[b]{.49\linewidth}
+\begin{subfigure}[b]{.5\linewidth}
 \includegraphics[width=1\linewidth]{figs/barabasi-albert-0}
 \caption{$T=0$}
 \end{subfigure}%
@@ -106,10 +107,52 @@ We can start with the simplest model that we have seen in class, the $C(n,p)$ gr
 \end{subfigure}
 
 \caption{Rumor spreading (blue nodes) in Barabasi Albert graph with $n=800$, $m_0 = 20$ and $M = 4$}
-
-An interesting chart is the evolution of the number of nodes informed.
-
+\label{barabasi-albert-graphs}
 \end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=1\linewidth]{figs/barabasi-albert-chart}
+\caption{Number of nodes informed over time in the Barabasi Albert simulation}
+\label{fig:barabasi-albert-chart}
+\end{figure}
+
+Intuitively it would be much more interesting to study more malformed graphs where some nodes are hard to reach. We will start with a simple example of a graph composed of two distinct graphs $C(n,p)$ with very few connections between the two. Those edges will form a bottle neck harder to cross for the gossip. Given that this bottle neck is a very good cut, this graph will have a very low conductance and the constant in the $\log n$ would be affected badly. The edges between the two distinct populations are picked independently and uniformly with probability $q$ in our simulation.
+
+\begin{figure}
+\centering
+
+\begin{subfigure}[b]{.5\linewidth}
+\includegraphics[width=1\linewidth]{figs/split-1}
+\caption{$T=3$}
+\end{subfigure}%
+\begin{subfigure}[b]{.5\linewidth}
+\includegraphics[width=1\linewidth]{figs/split-2}
+\caption{$T=7$}
+\end{subfigure}
+
+\begin{subfigure}[b]{.5\linewidth}
+\includegraphics[width=1\linewidth]{figs/split-3}
+\caption{$T=12$}
+\end{subfigure}%
+\begin{subfigure}[b]{.5\linewidth}
+\includegraphics[width=1\linewidth]{figs/split-4}
+\caption{$T=15$}
+\end{subfigure}
+
+\caption{Rumor spreading (blue nodes) in bottleneck model with $n=85$, $p = 0.1$ and $q = 0.0003$}
+\label{barabasi-albert-graphs}
+\end{figure}
+
+
+\begin{figure}
+\centering
+\includegraphics[width=1\linewidth]{figs/split-chart}
+\caption{Number of nodes informed over time in the bottleneck simulation}
+\label{fig:split-chart}
+\end{figure}
+
+We can see in \cref{fig:split-chart} that the number of informed nodes palliates when the rumor has to cross the bottleneck. It is normal that the topology of a network affects the quality of the broadcast and bridging an information between two very well distinct populations is hard.
 
 \bibliography{biblio.bib}
 
