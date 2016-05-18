@@ -200,7 +200,7 @@ It is more interesting to study malformed graphs where some nodes are hard to re
 We can see in \cref{fig:split-chart} that the number of informed nodes palliates when the rumor has to cross the bottleneck. It is normal that the topology of a network affects the quality of the broadcast and bridging an information between two very well distinct populations is hard. The experimental value of $\lambda_2$ is $0.9936$ which gives a very small $\alpha$ and $1/\alpha = 156.3$ still we can see an exponential trend but the constant depending on $1/\alpha$ and will make the spread much slower.
 
 \section{Conclusion}
-
+ We have studied and analyzed different rumor spreading algorithms that terminate in O(log n) rounds which can be useful for large infrastructure networks. Although those protocols are representative of real life broadcast in mobile networks (one node transmits information to one random adjacent node), we can find some weaknesses when it comes to represent social networks rumor spreading. There are two reasons for that, the first one is that in a social network like Facebook, an information can be (and most likely is) transmitted to many friends at once and not one per round. The second reason is that the node that receives the information can’t be chosen at random but in a very biased way where links have to be weighted (I share rumor with my closest friends ).However,those algorithms remain the easiest ones to compute.
 \begin{thebibliography}{1}
 
 \bibitem{guosun}
