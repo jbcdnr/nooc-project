@@ -173,16 +173,16 @@ It is more interesting to study malformed graphs where some nodes are hard to re
 \end{subfigure}%
 \begin{subfigure}[b]{.5\linewidth}
 \includegraphics[width=1\linewidth]{figs/split-2}
-\caption{$T=7$}
+\caption{$T=9$}
 \end{subfigure}
 
 \begin{subfigure}[b]{.5\linewidth}
 \includegraphics[width=1\linewidth]{figs/split-3}
-\caption{$T=12$}
+\caption{$T=13$}
 \end{subfigure}%
 \begin{subfigure}[b]{.5\linewidth}
 \includegraphics[width=1\linewidth]{figs/split-4}
-\caption{$T=15$}
+\caption{$T=17$}
 \end{subfigure}
 
 \caption{Rumor spreading (blue nodes) in bottleneck model with $n=85$, $p = 0.1$ and $q = 0.0003$}
@@ -198,6 +198,28 @@ It is more interesting to study malformed graphs where some nodes are hard to re
 \end{figure}
 
 We can see in \cref{fig:split-chart} that the number of informed nodes palliates when the rumor has to cross the bottleneck. It is normal that the topology of a network affects the quality of the broadcast and bridging an information between two very well distinct populations is hard. The experimental value of $\lambda_2$ is $0.9936$ which gives a very small $\alpha$ and $1/\alpha = 156.3$ still we can see an exponential trend but the constant depending on $1/\alpha$ and will make the spread much slower.
+
+\begin{table}
+\centering
+\begin{tabular}{c|c|c||c|c|c}
+  $q (10^{-5})$ & \# crossing & $\alpha (10^{-4})$ & .5 & .9 & 1\\
+  \hline
+  1 & 8 & 1.5 & 13 & 21 & 22 \\
+1.3 & 15 & 2.9 & 13 & 20 & 21 \\
+1.7 & 28 & 5.5 & 13 & 19 & 20 \\
+2.2 & 18 & 3.5 & 13 & 20 & 21 \\
+2.8 & 33 & 6.4 & 13 & 19 & 20 \\
+3.6 & 43 & 8.4 & 13 & 18 & 20 \\
+4.6 & 51 & 10.0 & 13 & 18 & 20 \\
+6.0 & 57 & 11.2 & 13 & 18 & 19 \\
+7.7 & 73 & 14.2 & 13 & 18 & 19 \\
+10 & 129 & 25.2 & 13 & 17 & 18 \\
+\end{tabular}
+\caption{Quantiles of the proportion of informed node during rumor spreading protocol on a bottle neck graph with bridging probability $q$, $n = 2 \cdot 1000$ and $p = 0.1$}
+\label{tab:quantiles}
+\end{table}
+
+We then simulate a range of bottle neck graphs for different parameters $q$ which are summarized in \cref{tab:quantiles}. The number of crossing edges is the smallest cut of the graph and is linked to $\alpha$. The lower the number of crossing edge is, the harder it is to make the bridge between the two populations and then it is consistent that the protocol takes more iteration to inform all the nodes. Indeed $1/\alpha$ is higher when the bottle neck is tighter and the number of rounds should increase. 
 
 \section{Conclusion}
  We have studied and analyzed different rumor spreading algorithms that terminate in O(log n) rounds which can be useful for large infrastructure networks. Although those protocols are representative of real life broadcast in mobile networks (one node transmits information to one random adjacent node), we can find some weaknesses when it comes to represent social networks rumor spreading. There are two reasons for that, the first one is that in a social network like Facebook, an information can be (and most likely is) transmitted to many friends at once and not one per round. The second reason is that the node that receives the information can’t be chosen at random but in a very biased way where links have to be weighted (I share rumor with my closest friends ).However,those algorithms remain the easiest ones to compute.
