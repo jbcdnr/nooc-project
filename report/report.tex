@@ -124,7 +124,7 @@ The conclusion for that is, the convergence of the process does not depend on th
 The second protocol uses pseudo-random generators,one for seed length $l'$ that produces $T/2 $ l-bits outputs (one for each round). Concretely, it means, for a given node, it is a way to determine to which neighbor the information will be transmitted. Roughly speaking, pseudo-randomness means $P(G’0(x)=\underbrace{0\dots0}_l)$ for a $l’$-length seed $x$ for instance is equal to $(1/2)^l$ (approximatively). We also use a pseudo random generator $f$:$l$-bits word $\to$ an index modulo delta for each possible node. To sum things up, all the randomness lie in the l’ bits seed that the system generates (actually there are two of them), then for each round the $G’$ PRG assigns a l bits word to these seeds ($x$ if round before $T/2$ and $y$ otherwise). From this $l$ bits word, each informed node generates an index to modulate according to its neighbor list to know which neighbor to inform.
  The method to follow, is to start from arbitrary $l’$-long bit strings $x,y$. Construct a pseudo random generator
   \[
-    \left\( \zeta'_{0} ,...,   \zeta'{T/2} \right\):  $\left\{ 0,1 \right\}^l'$ -> \left\( $\left\{0,1\right\}^T/2$ \right\)
+    \left\( $\zeta'_{0}$ ,...,   $\zeta'_{T/2}$ \right\):  $\left\{ 0,1 \right\}^l'$ -> \left\( $\left\{0,1\right\}^T/2$ \right\)
   
    \]
  
