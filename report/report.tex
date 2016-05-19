@@ -11,12 +11,14 @@
 %
 % paper title
 % can use linebreaks \\ within to get better formatting as desired
-\title{NOOC project - Gossip vs. Markov Chains}
-\author{Ismail Bouanani and Jean-Baptiste Cordonnier}
+\title{NOOC Paper Review\\Gossip vs. Markov Chains}
+\author{\begin{tabular}{rl}
+\textbf{Jean-Baptiste Cordonnier}&\texttt{jean-baptiste.cordonnier@epfl.ch}\\\textbf{Ismail Bouanani}&\texttt{ismail.bouanani@epfl.ch}
+\end{tabular}}
 
 \IEEEcompsoctitleabstractindextext{
 \begin{abstract}
-Rumor spreading is a well known problem with multiple applications, from information broadcast in complex distributed systems to analysis of viral content on social networks. This project report will go over the paper of Guo and Sun \cite{guosun} analyzing the natural rumor spreading algorithm with Markov chains. We aim at providing a good understanding of the concept and the mathematical tool used to show that the number of time steps needed to spread a rumor is $O(\log n)$. This report also study one of the main concerns: the randomness requirement needed to run the algorithm. We will finally provide simulation of this algorithm on specific graphs. 
+Rumor spreading is a well known problem with multiple applications, from information broadcast in complex distributed systems to analysis of viral content on social networks. This project report will go over the paper of Guo and Sun \cite{guosun} analyzing the natural rumor spreading algorithm using random walks and Markov chains. We aim at providing a good understanding of the mathematical tool and  the concepts used to show that the number of time steps needed to spread a rumor is $O(\log n)$. This report also study one of the main concerns: the randomness requirement needed to run the algorithm. We will finally provide simulation of this algorithm on specific graphs. 
 \end{abstract}
 }
 
@@ -34,24 +36,26 @@ Rumor spreading is a well known problem with multiple applications, from informa
 
 \section{Introduction}
 
-In any distributed information system it is a common task to share a piece of information with other nodes of the system. This task can be seen as spreading a rumor across a graph of connected nodes form a source node. At each time step any informed node can reach out to one of his neighbor until all the nodes are informed. The rumor spreading protocol is the simplest algorithm we can come with in order to solve the rumor spreading problem. Given a starting node $s$ (the source of the gossip), we keep track of a set of informed nodes $S$. At each time step of the algorithm, each informed node selects one of his neighbor uniformly at random and inform him. Step after step the set of informed nodes will grow until it contains all the vertex of $G$. Once a node is informed he becomes an informer and will spread the gossip during the following time steps.
+In any distributed information system it is a common task to share a piece of information with other nodes of the system. This task can be seen as spreading a rumor across a graph of connected nodes form a source vertex. At each time step any informed node can reach out to one of his neighbor until all the nodes are informed. The rumor spreading protocol is the simplest algorithm we can come with in order to solve the rumor spreading problem. Given a starting node $s$ (the source of the gossip), we keep track of a set of informed nodes $S$. At each time step of the algorithm, each informed node selects one of his neighbor uniformly at random and inform him. Step after step the set of informed nodes will grow until it contains all the vertex of $G$. Once a node is informed he becomes an informer and will spread the gossip during the upcoming time steps.
 
-This rumor spreading protocol has been extensively studied and the $O(\log n)$ bound is well known (with $n$ being the number of nodes). This paper comes after a serie of paper proving this bound in different set-up using different properties of the graph (regularity, diameter, conductance). This paper uses a new technique of simulating the push and pull of the rumor with forward and backward random walks, it yields the following main result:
+This rumor spreading protocol has been extensively studied and the $O(\log n)$ bound is well known (with $n$ being the number of nodes). This paper comes after a serie of papers proving this bound in different set-up with diverse assumptions on the graph (regularity, diameter, conductance). This paper uses a new technique of simulating the push and pull of the rumor with forward and backward random walks, it yields the following main result:
 
 \vspace{.3cm}
 \noindent\fbox{\begin{minipage}{0.97\linewidth}
 \textbf{Main result.}
-  Let $G$ be a graph with $n$ nodes, spectral gap $\alpha$ and irregularity $\beta$. Then there is an explicit protocol using $O(C' \log n) + \tilde O(\log n)$ random bits sucht that with high probability all nodes get the rumor in $T=O(C \log n)$ rounds, where $C = (1/\alpha) \cdot \beta^2 \max(1, 1/(\alpha \cdot \Delta ^ {0.499}))$
+  Let $G$ be a graph with $n$ nodes, spectral gap $\alpha$ and irregularity $\beta$. Then there is an explicit protocol using $O(C \log n) + \tilde O(\log n)$ random bits, where $C=(\log (1/\alpha) + \log \beta)$ such that with high probability all nodes get the rumor in $T=O(C' \log n)$ rounds, where $C' = (1/\alpha) \cdot \beta^2 \max(1, 1/(\alpha \cdot \Delta ^ {0.499}))$
 \end{minipage}}
 \vspace{.3cm}
 
-The intuition behind any case of rumor spreading is that the topology of the graph has a great impact on the efficiency of our algorithm. For instance, nodes very poorly connected and far from the center are hard to reach and terrible rumor sources. This essence of "good" and "bad" graphs is captured by the spectral gap $\alpha$ and the irregularity $\beta$. The spectral gap $\alpha$ is defined by $\alpha \triangleq 1 - \lambda_2$ where $\lambda_2$ is the second eigenvalue of the Laplacian matrix associated to the graph \cite{jerrum} and is very related to the graph conductance. Intuition tells us that if there are a lot of edges and no bottlenecks then the flow should spread out quickly and the Markov chain mix rapidly. The irregularity $\beta$ is defined as $\beta \triangleq \Delta/\delta$ (highest node degree over lowest node degree) and captures the heterogeneity of the node degrees. If the graph is  irregular, a very isolated source node could be picked as the source of the gossip and it would take more time to inform all the network.
+The intuition behind any case of rumor spreading is that the topology of the graph has a great impact on the efficiency of our algorithm. For instance, nodes very poorly connected and far from the center are hard to reach and terrible rumor sources. This essence of "good" and "bad" graphs is captured by the spectral gap $\alpha$ and the irregularity $\beta$. The spectral gap $\alpha$ is defined by $\alpha \triangleq 1 - \lambda_2$ where $\lambda_2$ is the second eigenvalue of the Laplacian matrix associated to the graph \cite{jerrum} and is related to the graph conductance. Intuition tells us that if there are a lot of edges and no bottleneck then the flow should spread out quickly and the Markov chains mix rapidly. The irregularity $\beta$ is defined as $\beta \triangleq \Delta/\delta$ (highest over lowest node degree) and captures the heterogeneity of the node degrees. If the graph is  irregular, a very isolated source node could be picked as the source of the gossip and it would take more time to inform all the network.
 
-\section{Proof overlook}
+\textbf{TODO: add a word on randomness}
 
-The analysis in the paper of Guo and Sun \cite{guosun} compares the problem of gossip spreading to many random walks in parallel. Whenever a node $u$ pushes the information to an uninformed node $v$, one random walk stays in $u$ and another one goes to $v$. The random walk that "stays" in the same node is called $lazy$ while the other one is non-lazy (or $\overline{lazy}$). This split of random walks characterize the fact that the information is now present both in $u$ and $v$. Node $u$ will continue to spread the knowledge in the following rounds.
+\section{Proof outline}
 
-The main idea behind the proof is to use the duality of information sharing. Whenever a node $u$ informs $v$, we say that he pushes the information to $v$ but we can also consider that $v$ pulled the information from $u$. We then define two types of random walks when the information is spread through the graph: the forward and the backward random walks. Forward random walks start from the source $s$ and are pushing the information through a path while the backward random walks start from a targeted node $t$ a pull the information. In fact if a node $u$ pushes information to a node $v$, we can also say that $v$ pulls the information from $u$ and the backward random walk takes a step from $v$ to $u$, that remains true if and only if $u$ is the only node that pushed to $v$ is $u$. The backward random walks are only used for the analysis, because in practice there is no way for a node to pull the information as long as no neighbor is informed. Finally, to know if a target node $t$ has been informed, we only need to know if there exists a node $v$ reached by a forward random walk from $s$ and by a backward random walk from $t$.
+The analysis in the paper of Guo and Sun \cite{guosun} compares the problem of gossip spreading to many random walks in parallel. At each round, a random walk take a step on a graph as the rumor would spread between the nodes. Whenever a node $u$ pushes the information to an uninformed node $v$, one random walk stays in $u$ and another one goes to $v$. The random walk that "stays" in the same node is called $lazy$ while the other one is non-lazy (or $\overline{lazy}$). This split of random walks characterize the fact that the information is now present both in $u$ and $v$. Node $u$ will continue to spread the knowledge in the following rounds.
+
+The main idea behind the proof is to use the duality of information sharing. Whenever a node $u$ informs $v$, we say that he pushes the information to $v$ but we can also consider that $v$ pulled the information from $u$. We then define two types of random walks when the information is spread through the graph: forward and backward random walks. Forward random walks start from the source $s$ and are pushing the information through a path while the backward random walks start from a targeted node $t$ and pull the information. For instance, if a node $u$ pushes information to a node $v$, a forward random walk would take a step from $u$ to $v$ and a backward random walk would take a step from $v$ to $u$, that remains true if and only if $u$ is the only node that pushed to $v$ is $u$. In practice there is no way for a node to pull the information as long as no neighbor is informed, that's why the backward random walks are only used for the analysis. Finally, to know if a target node $t$ has been informed, we only need to know if there exists a node $v$ reached by a forward random walk from $s$ and by a backward random walk from $t$.
 
 
 \begin{figure}[h]
@@ -74,17 +78,14 @@ The main idea behind the proof is to use the duality of information sharing. Whe
 \caption{Random walk state}
 \label{fig:lazyFSM}
 \end{figure}
- One common thing about all  the protocols below is that in all of them we seek for randomness and efficiency. Randomness means that the rumor spreading is independent on the first node that has the information.It also means that the choice of the node an informed node transmits the  information to is close to a uniform choice among its adjacency list (actually is uniform in the first protocol). Efficiency means that the rumor is spread all over the network almost surely in a number of rounds $T=O(\log n)$, our results say that it is the case. In addition to that, efficiency means we want to generate as few random bits as possible, at that level some are better than the others, we will get to it.
 
-To show that any node $w$ will be reached after a given number of time steps we consider all the possible spreading path from the source $s$. The information reaches $w$ as long as there is a intermediary node $u$between a forward random walk from $s$ and a backward random walk from $w$ as explained earlier. To set the lower bound, we consider all the random walks pattern after $k$ steps $S \in \mathcal C_k = \{ lazy, \overline{lazy} \}^k$ as in \cref{fig:lazyFSM}. Let's define the indicator random variable $X_{u,v}^S$ (resp. $Y_{u,v}^S$) that the forward (resp. backward) random walk with pattern $S$ and initial node $u$ ends up at node $v$. To show that a node $w$ is reached by the gossip in $T$ steps we need to find a vertex $u$ such that $X_{s,u}^{S}Y_{w,u}^{S'} = 1$ with $S, S' \in \mathcal C_{T/2}$. We can now lower bound the probability of a node to be informed in $T$ steps as follow
+To show that any node $w$ will be reached after a given number of rounds we consider all the possible spreading path from the source $s$. The information reaches $w$ as long as there is an intermediary node $u$between a forward random walk from $s$ and a backward random walk from $w$ as explained earlier. To set the lower bound, we consider all the random walks pattern after $k$ steps $S \in \mathcal C_k = \{ lazy, \overline{lazy} \}^k$ as in \cref{fig:lazyFSM}. Let's define the indicator random variable $X_{u,v}^S$ (resp. $Y_{u,v}^S$) that the forward (resp. backward) random walk with pattern $S$ and initial node $u$ ends up at node $v$. To show that a node $w$ is reached by the gossip in $T$ steps we need to find a vertex $u$ such that $X_{s,u}^{S}Y_{w,u}^{S'} = 1$ with $S, S' \in \mathcal C_{T/2}$. We can now lower bound the probability of a node to be informed in $T$ steps as follow
 \begin{align*}
   \scriptsize
   \P{w \text{ informed in $T$ rounds}} \geq \P{\sum_{S,S'\in \mathcal C_{T/2}, u\in V[G]} X_{s,u}^S Y_{w,u}^{S'} > 0}
 \end{align*}
 
-In the next section we will analyze this lower bound thanks to random walks taken individually and pair wisely.
-
-The need to analyze two random walks together to get a lower bound of the expectation leads us to use Markov chain coupling. Formally, a matrix coupling is defined as follow:
+The authors of the paper analyze this lower bound thanks to random walks taken individually and pair wisely. The need to analyze two random walks together to get a lower bound of the expectation leads us to use Markov chain coupling. Formally, a matrix coupling is defined as follow:
 
 \begin{definition}
   A stochastic matrix $\mathbf{M'' \in \mathbb{R}^{n\times n} \otimes \mathbb{R}^{n\times n}}$ is a coupling of $\mathbf{M,M''} \in \mathbb{R}^{n\times n}$ if $\sum_{x\in[n]} \mathbf{M''}_{(u,w)(v,x)} = \mathbf{M}_{u,v}$ for any $u,w,v \in [n]$ and $\sum_{v\in[n]} \mathbf{M''}_{(u,w)(v,x)} = \mathbf{M'}_{w,x}$.
@@ -119,9 +120,9 @@ The conclusion for that is, the convergence of the process does not depend on th
 
 A drawback for that protocol would be its consumption of too many random bits which is O(n logn) per round. Indeed, at each round ,each informed node (worst case n in total) fills a log n-long bit string to define the neighbor receiving the information.
 
-
-
 \section{Randomness requirement}
+
+One common thing about all  the protocols below is that in all of them we seek for randomness and efficiency. Randomness means that the rumor spreading is independent on the first node that has the information.It also means that the choice of the node an informed node transmits the  information to is close to a uniform choice among its adjacency list (actually is uniform in the first protocol). Efficiency means that the rumor is spread all over the network almost surely in a number of rounds $T=O(\log n)$, our results say that it is the case. In addition to that, efficiency means we want to generate as few random bits as possible, at that level some are better than the others, we will get to it.
 
 In order to reduce the cost of the protocol in terms of random bits, a different protocol with a different way to chose the neighbor is designed. The second protocol uses pseudo-random generators,one for seed length $l'$ that produces $T/2 $ l-bits outputs (one for each round). Concretely, it means, for a given node, it is a way to determine to which neighbor the information will be transmitted. Roughly speaking, pseudo-randomness means $P(G’0(x)=\underbrace{0\dots0}_l)$ for a $l’$-length seed $x$ for instance is equal to $(1/2)^l$ (approximatively). We also use a pseudo random generator $f$:$l$-bits word $\to$ an index modulo delta for each possible node. To sum things up, all the randomness lie in the l’ bits seed that the system generates (actually there are two of them), then for each round the $G’$ PRG assigns a l bits word to these seeds ($x$ if round before $T/2$ and $y$ otherwise). From this $l$ bits word, each informed node generates an index to modulate according to its neighbor list to know which neighbor to inform.
  The method to follow, is to start from arbitrary $l’$-long bit strings $x,y$. Construct a pseudo random generator
@@ -193,7 +194,7 @@ It is more interesting to study malformed graphs where some nodes are hard to re
 \caption{$T=17$}
 \end{subfigure}
 
-\caption{Rumor spreading (blue nodes) in bottleneck model with $n=85$, $p = 0.1$ and $q = 0.0003$}
+\caption{Rumor spreading (blue nodes) in bottleneck model with $n=100$, $p = 0.1$ and $q = 0.0003$}
 \label{barabasi-albert-graphs}
 \end{figure}
 
