@@ -75,7 +75,7 @@ The main idea behind the proof is to use the duality of information sharing. Whe
 \draw [black] (44.78,-25.277) arc (144:-144:2.25);
 \fill [black] (44.78,-27.92) -- (45.13,-28.8) -- (45.72,-27.99);
 \end{tikzpicture}
-\caption{Random walk state}
+\caption{Random walk state $\mathcal C_k$}
 \label{fig:lazyFSM}
 \end{figure}
 
@@ -108,15 +108,14 @@ We similarly define a lazy coupling of $\mathbf{M}$ and $\mathbf{M'}$ noted $\ma
   \right.
 \]
 
-The aim of this lemma is to show that after $k$ rounds, and independently of the pattern followed (we consider the lazy version of the matrix here), any distribution is identical to the stationary distribution $\pi \otimes \pi$ (i.e $P(u,v)=(1/n)^2$) for all $(u,v) \in V[G] \times V[G]$. To do so, we upper bound the quadratic distance
+Once we have set these notations, we can come up with a bound on the $l_2$ norm with $\pi \otimes \pi$. This $\pi \otimes \pi$ vector is the distribution we want to reach because it means that the random walks can be in any state uniformly independently of the starting point of the rumor.
 
 \[
   \norm{u(\mathcal L_{\gamma,\gamma} \circ \mathcal Q(M))^k - \pi \otimes \pi}_2 \leq (1 - \gamma \alpha / 2)^k + 2 \sqrt 2 \gamma \alpha^{-1} n^{-3/2}
 \]
 
-The conclusion for that is, the convergence of the process does not depend on the node who has the information first since after $k$ rounds ($k$ big enough), the parallel $2^k$ Markov chains have joint evolutions (or almost).
+Given that the right part of the inequality is close to 0 when $n$ is high and $k$ goes to infinity, the stationary distribution of $\mathcal L_{\gamma,\gamma} \circ \mathcal Q(M)$ is very close to $\pi \otimes \pi$. After $k$ rounds and independently of the pattern followed (we consider the lazy version of the matrix here), the random walks have reached all the node and follow the stationary distribution $\pi \otimes \pi$ (i.e $P(u,v)=(1/n)^2$) for all $(u,v) \in V[G] \times V[G]$. 
 
-A drawback for that protocol would be its consumption of too many random bits which is O(n logn) per round. Indeed, at each round ,each informed node (worst case n in total) fills a log n-long bit string to define the neighbor receiving the information.
 
 \section{Randomness requirement}
 
