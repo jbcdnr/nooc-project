@@ -2,8 +2,53 @@
 
 var graph;
 var node;
+var evolution = [];
+
+var seed = 1;
+function random() {
+    var x = Math.sin(seed++) * 10000;
+    return x - Math.floor(x);
+}
+
+
+function getEvolution() {
+  toReturn = []
+  j = 1
+  for (var i = 0; i < evolution.length; i++) {
+    toReturn.push(j)
+    j += evolution[i]
+  }
+  return toReturn
+}
+
+function reset() {
+  evolution = []
+  seed = 1
+  uninformAll()
+}
+
+function simulate(deltaT) {
+  var j = 0
+  var f = function() {
+    j++
+    i = informRound()
+    console.log("Step " + j + ", informed " + i + " new nodes")
+    if (i > 0) {
+      setTimeout(f, deltaT)
+    }
+  }
+  f()
+}
+
+function uninformAll() {
+  graph.nodes.forEach(function (node) {
+    node.informed = false;
+  });
+  node.style("fill", function (d) { return (d.informed ? '#1f77b4' : 'black'); });
+}
 
 function inform(index) {
+  evolution = []
   graph.nodes[index].informed = true
   node.style("fill", function (d) { return (d.informed ? '#1f77b4' : 'black'); });
 }
@@ -16,7 +61,7 @@ function informRound() {
                 return (e.source.index == node.index && ! e.target.informed) || (e.target.index == node.index && ! e.source.informed)
               }).map(function(e) { return e.source == node ? e.target : e.source })
               if (uninformedNeighbors.length > 0) {
-                var rand = Math.floor(Math.random()*uninformedNeighbors.length)
+                var rand = Math.floor(random()*uninformedNeighbors.length)
                 if (! uninformedNeighbors[rand].informed) {
                   uninformedNeighbors[rand].informed = true
                   i += 1
@@ -24,6 +69,7 @@ function informRound() {
               }
              });
   node.style("fill", function (d) { return (d.informed ? '#1f77b4' : 'black'); });
+  evolution.push(i)
   return i
 }
 
@@ -128,7 +174,7 @@ function splitGraph(n,p,q) {
 
    for (i = 0; i < n; i++) {
       for (j = n; j < 2 * n; j++) {
-          if (Math.random() < q) {
+          if (random() < q) {
               graph.edges.push({
                   source: i,
                   target: j
@@ -237,7 +283,7 @@ function informRound2(graph) {
                 return (e.source.index == node.index && ! e.target.informed) || (e.target.index == node.index && ! e.source.informed)
               }).map(function(e) { return e.source == node ? e.target : e.source })
               if (uninformedNeighbors.length > 0) {
-                var rand = Math.floor(Math.random()*uninformedNeighbors.length)
+                var rand = Math.floor(random()*uninformedNeighbors.length)
                 if (! uninformedNeighbors[rand].informed) {
                   uninformedNeighbors[rand].informed = true
                   i += 1
