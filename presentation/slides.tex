@@ -158,7 +158,7 @@
 \frametitle{Forward and reversed random walks}
 \item Rumor sharing is dual : if $u$ pushes to $v$, $v$ pulls from $u$
 \item 2 types of random walks: forward (pushing from a source) and reversed(pulling from a target). 
-\item If a forward random walk takes a step from $u$ to $v$, a reversed one   takes a step form $v$ to $u$, if$u$ is the only node pushing to $v$.
+\item If a forward random walk takes a step from $u$ to $v$, a reversed one   takes a step form $v$ to $u$, if $u$ is the only node pushing to $v$.
 \item Reversed random walks are only an analytic tool (no pulls in practice)
  
 \end{itemize}
@@ -184,23 +184,14 @@
 
 \begin{frame}
 \begin{itemize}
-\frametitle{Matrix coupling (1/2)}
-\item We analyze random walks pair wisely. This is done thanks to Markov Chains coupling.
-\item Let \textbf{M} and \textbf{M'} two Markov chains, \textbf{M''} represents the joint evolution of both the processes.
-\item Here, we use lazy coupling $\mathcal L_{\gamma, \gamma'}(\mathbf{M''})$ which is the coupling of $\mathcal L_\gamma(\mathbf{M})$ with $\mathcal L_{\gamma'}(\mathbf{M'})$ 
-  where \[
+\frametitle{Matrix coupling }
+\item We analyze random walks pair wisely with Markov Chains coupling. It's a way to represent their joint evolution
+\item We use the lazy matrix $
   \mathcal L _ \gamma (\mathbf{M}) \triangleq (1-\gamma) \mathbf{I} + \gamma \mathbf{M}
-\] is the lazy version of \textbf{M} (we add the eventuality of self-edges that occur at a lazy state)
+$
 
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}
-\begin{itemize}
-\frametitle{Matrix coupling (2/2)}
-\item Here, we have to couple different versions of the same Random walk.
-\item Doeblin coupling  : 
+  (\textbf{M} with self-edge eventuality)
+\item Doeblin coupling  : Once two walks meet at the same node $u$, they are never separated again.
 \[
   \mathcal Q(\mathbf{M})_{(u,w)(v,x)} \triangleq \left\{
     \begin{array}{ll}
@@ -209,12 +200,13 @@
     \end{array}
   \right.
 \]
-\item Idea of Doeblin coupling : Once two walks meet at the same node $u$, they are never separated again. 
+
 
 \end{itemize}
-
-
 \end{frame}
+
+
+
 
 \begin{frame}
 \begin{itemize}
